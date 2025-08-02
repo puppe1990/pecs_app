@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDrop } from 'react-dnd'
 import { PecsImage, PecsAction } from '@/types/pecs'
 import { PECS_IMAGES, getRandomImages } from '@/lib/pecsData'
@@ -30,6 +30,12 @@ export default function Phase1Component() {
       canDrop: monitor.canDrop(),
     }),
   })
+
+  const dropRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (drop) {
+      drop(node)
+    }
+  }, [drop])
 
   useEffect(() => {
     initializeRound()
@@ -152,7 +158,7 @@ export default function Phase1Component() {
                 Parceiro de Comunicação
               </h3>
               <div
-                ref={drop}
+                ref={dropRefCallback}
                 className={`
                   drop-zone min-h-[200px] flex items-center justify-center rounded-lg
                   ${isOver && canDrop ? 'can-drop' : ''}

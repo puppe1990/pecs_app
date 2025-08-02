@@ -43,9 +43,15 @@ export function PecsImage({
     }
   }
 
+  const refCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (draggable && drag) {
+      drag(node)
+    }
+  }, [draggable, drag])
+
   return (
     <div
-      ref={draggable ? drag : undefined}
+      ref={refCallback}
       className={cn(
         'pecs-card p-4 transition-all duration-200',
         selected && 'selected',

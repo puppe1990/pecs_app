@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDrop } from 'react-dnd'
 import { PecsImage, PecsAction } from '@/types/pecs'
 import { PECS_IMAGES, getRandomImages } from '@/lib/pecsData'
@@ -43,6 +43,12 @@ export default function Phase2Component() {
       canDrop: monitor.canDrop(),
     }),
   })
+
+  const dropRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (drop) {
+      drop(node)
+    }
+  }, [drop])
 
   useEffect(() => {
     initializeRound()
@@ -181,7 +187,7 @@ export default function Phase2Component() {
           <div className="relative bg-gradient-to-br from-blue-100 to-green-100 rounded-lg p-8 h-96 border-2 border-gray-200">
             {/* Partner Position */}
             <div
-              ref={drop}
+              ref={dropRefCallback}
               className={`absolute transform -translate-x-1/2 -translate-y-1/2 ${
                 isOver && canDrop ? 'scale-110' : ''
               }`}

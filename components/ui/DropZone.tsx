@@ -37,9 +37,15 @@ export function DropZone({
     }),
   })
 
+  const dropRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (drop) {
+      drop(node)
+    }
+  }, [drop])
+
   return (
     <div
-      ref={drop}
+      ref={dropRefCallback}
       className={cn(
         'drop-zone transition-all duration-200',
         isOver && canDrop && !disabled && activeClassName,

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useDrop } from 'react-dnd'
+import React, { useState, useEffect } from 'react'
+import { useDrop, useDrag } from 'react-dnd'
 import { PecsImage, PecsElement, PecsPhrase } from '@/types/pecs'
 import { PECS_IMAGES, PECS_PHRASES, getRandomImages } from '@/lib/pecsData'
 import { PecsImage as PecsImageComponent } from '@/components/PecsImage'
@@ -34,6 +34,12 @@ export default function Phase4Component() {
       isOver: monitor.isOver(),
     }),
   })
+
+  const dropRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (drop) {
+      drop(node)
+    }
+  }, [drop])
 
   useEffect(() => {
     initializeRound()
@@ -197,7 +203,7 @@ export default function Phase4Component() {
             Tira de Frase
           </h3>
           <div
-            ref={drop}
+            ref={dropRefCallback}
             className={`
               min-h-[120px] border-2 border-dashed rounded-lg p-4 flex items-center space-x-3 overflow-x-auto
               ${isOver ? 'border-blue-400 bg-blue-50' : 'border-gray-300 bg-gray-50'}
@@ -349,11 +355,23 @@ export default function Phase4Component() {
 
 // Helper Components
 function StarterCard({ starter }: { starter: { id: string; text: string; src: string } }) {
-  const [{ isDragging }, drag] = useState(false)
+  const [{ isDragging }, drag] = useDrag({
+    type: 'starter',
+    item: { type: 'starter', text: starter.text },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  })
+
+  const dragRefCallback = React.useCallback((node: HTMLDivElement | null) => {
+    if (drag) {
+      drag(node)
+    }
+  }, [drag])
 
   return (
     <div
-      ref={drag}
+      ref={dragRefCallback}
       className={`
         bg-blue-100 border-2 border-blue-300 rounded-lg p-3 cursor-move transition-all duration-200
         hover:bg-blue-200 hover:border-blue-400 hover:scale-105
