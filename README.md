@@ -1,6 +1,9 @@
 # PECS App - Sistema de Comunicação por Troca de Figuras
 
 Um sistema web interativo desenvolvido em Next.js para aprendizado do PECS (Picture Exchange Communication System), um método de comunicação alternativa que utiliza imagens para facilitar a comunicação de pessoas com dificuldades de fala, especialmente crianças com autismo.
+<img width="1692" height="951" alt="Screenshot 2025-08-02 at 19 56 11" src="https://github.com/user-attachments/assets/4364f562-378c-492c-9468-40132b6198b6" />
+<img width="1698" height="952" alt="Screenshot 2025-08-02 at 19 55 59" src="https://github.com/user-attachments/assets/f54b9742-6789-4efc-89c0-82e633728a34" />
+
 
 ## 🎯 Sobre o PECS
 
