@@ -26,11 +26,36 @@ export default function HomePage() {
     lastActivity: new Date()
   })
 
-  useEffect(() => {
+  const loadUserProgress = () => {
     // Load user progress from localStorage
     const savedProgress = localStorage.getItem('pecsProgress')
     if (savedProgress) {
       setUserProgress(JSON.parse(savedProgress))
+    }
+  }
+
+  useEffect(() => {
+    loadUserProgress()
+    
+    // Listen for storage changes (when user returns from a phase)
+    const handleStorageChange = () => {
+      loadUserProgress()
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Also check for changes when the page becomes visible
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadUserProgress()
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 
@@ -48,6 +73,21 @@ export default function HomePage() {
       case 'available': return 'bg-gray-200 text-gray-700 hover:bg-gray-300'
       case 'locked': return 'bg-gray-100 text-gray-400'
       default: return 'bg-gray-200 text-gray-700'
+    }
+  }
+
+  const resetProgress = () => {
+    if (confirm('Tem certeza que deseja resetar todo o progresso? Isso não pode ser desfeito.')) {
+      const initialProgress: UserProgress = {
+        userId: 'user1',
+        currentPhase: 1,
+        phasesCompleted: [],
+        totalSessions: 0,
+        successRate: 0,
+        lastActivity: new Date()
+      }
+      setUserProgress(initialProgress)
+      localStorage.setItem('pecsProgress', JSON.stringify(initialProgress))
     }
   }
 
@@ -221,6 +261,16 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
+        </section>
+
+        {/* Reset Progress Button */}
+        <section className="text-center mt-8">
+          <button
+            onClick={resetProgress}
+            className="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors duration-200"
+          >
+            Resetar Progresso
+          </button>
         </section>
       </main>
 
